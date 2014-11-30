@@ -568,6 +568,18 @@ function mixedComplex()
         }
     }',
             ),
+            array(
+                '<?php
+    if (0) {
+        $foo = 1; // comment
+        $bar = 2;
+    }',
+                '<?php
+    if (0) {
+        $foo = 1; // comment
+            $bar = 2;
+    }',
+            ),
         );
     }
 
