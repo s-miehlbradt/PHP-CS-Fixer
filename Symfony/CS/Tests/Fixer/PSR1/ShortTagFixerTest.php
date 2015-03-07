@@ -26,6 +26,8 @@ class ShortTagFixerTest extends AbstractFixerTestBase
     public function provideClosingTagExamples()
     {
         return array(
+            array('<?php echo "<?
+";'),
             array('<?php echo \'Foo\';', '<? echo \'Foo\';'),
             array('<?= echo \'Foo\';'),
             array('<?php echo \'Foo\'; ?> PLAIN TEXT'),
