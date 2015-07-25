@@ -1,0 +1,24 @@
+Doctrine:
+    ref: https://github.com/doctrine/doctrine2/blob/14ff7f50cfea67d8a4dca37b8ca364d2a83b9864/CONTRIBUTING.md#coding-standard
+    base:
+        @PSR1
+        @PSR2
+    extra:
+        align =
+        ? align =>
+        LogicalNotOperatorsWithSpacesFixer
+
+Laravel:
+    ref: ?
+    base:
+        ?
+    extra:
+        LogicalNotOperatorsWithSuccessorSpaceFixer
+
+Fabbot.io:
+    ref: ?
+    base:
+        @Symfony
+    extra:
+        PhpUnitStrictFixer
+        PhpUnitConstructFixer
