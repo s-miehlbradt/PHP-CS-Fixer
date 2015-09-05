@@ -20,5 +20,5 @@ Fabbot.io:
     base:
         @Symfony
     extra:
-        PhpUnitStrictFixer
-        PhpUnitConstructFixer
+        ? PhpUnitStrictFixer
+        ? PhpUnitConstructFixer
