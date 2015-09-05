@@ -1,4 +1,7 @@
-I have tried to keep commits very clean to show what has changed step by step. Below some description... Each point should match commit.
+I have tried to keep commits very clean to show what has changed step by step.
+Below some description... Each point should match commit.
+Please ignore merge commits, I will get rid of them later.
+
 This PR may be big, so it may be worth to read changes commit by commit instead of all at once.
 Please split discussion into two parts - first do we like changes described below and implemented, and then, if we agreed about changes, I will fill the docs and review of the code itself may begin.
 
@@ -54,13 +57,12 @@ For example, consider the following:
     --rules=strict,return,encoding,short_tag,-encoding
     --rules=strict,return,short_tag
     ```
-
 Also, remove getLevel method from FixerInterface.
 
-5. **TODO: Add FixerInterface::configure method**
+5. **Add FixerInterface::configure method**
 For now we have only way to turn fixer on or off, without possibility to configure how it should fix the code. This problem manifested first time with HeaderCommentFixer, when we have no way to configure the header itself!
 Now, the fixers may have configuration (eg PhpUnitStrictFixer) and we have a way to change default configuration.
-Setting the configuration for Fixers when use CLI tool is only possible in .php_cs file, not via CLI args.
+Setting the configuration for Fixers when using CLI tool is only possible in .php_cs file, not via CLI args.
 In .php_cs file configuration is passed as part of rules definition:
     ```php
     ->setRules([
@@ -71,12 +73,10 @@ In .php_cs file configuration is passed as part of rules definition:
     ])
     ```
 When a rule is false then fixer is off, when rule is truly then rule is on - especially when true it is on with default configuration and when it's array it is on and array is passed to configure method.
-
 Also, remove Symfony\CS\Fixer\Contrib\HeaderCommentFixer::setHeader method
-TODO - PHPUnit... ??
 
-6. **TODO: Cache now detect configuration change not only by tool version and names of fixers, but also their configuration**
-Closes #1305.
+6. **Cache now detect configuration change not only by tool version and names of fixers, but also their configuration**
+Closes #1305. (ping @GrahamCampbell)
 
 7. **TODO: Remove splitting fixer files into level subdirectories**
 
