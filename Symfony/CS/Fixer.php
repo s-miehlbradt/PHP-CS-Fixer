@@ -291,9 +291,11 @@ class Fixer
 
             if (!$dryRun && false === @file_put_contents($file->getRealpath(), $new)) {
                 $error = error_get_last();
-                if ($error) {
+
+                if (null !== $error) {
                     throw new IOException(sprintf('Failed to write file "%s", "%s".', $file->getRealpath(), $error['message']), 0, null, $file->getRealpath());
                 }
+
                 throw new IOException(sprintf('Failed to write file "%s".', $file->getRealpath()), 0, null, $file->getRealpath());
             }
 

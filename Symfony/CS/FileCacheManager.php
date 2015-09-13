@@ -142,6 +142,12 @@ final class FileCacheManager
         );
 
         if (false === @file_put_contents($this->cacheFile, $data, LOCK_EX)) {
+            $error = error_get_last();
+
+            if (null !== $error) {
+                throw new IOException(sprintf('Failed to write file "%s", "%s".', $this->cacheFile, $error['message']), 0, null, $this->cacheFile);
+            }
+
             throw new IOException(sprintf('Failed to write file "%s".', $this->cacheFile), 0, null, $this->cacheFile);
         }
     }

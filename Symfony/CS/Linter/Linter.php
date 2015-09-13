@@ -127,6 +127,12 @@ final class Linter implements LinterInterface
         }
 
         if (false === @file_put_contents($this->temporaryFile, $source)) {
+            $error = error_get_last();
+
+            if (null !== $error) {
+                throw new IOException(sprintf('Failed to write file "%s", "%s".', $this->temporaryFile, $error['message']), 0, null, $this->temporaryFile);
+            }
+
             throw new IOException(sprintf('Failed to write file "%s".', $this->temporaryFile), 0, null, $this->temporaryFile);
         }
 

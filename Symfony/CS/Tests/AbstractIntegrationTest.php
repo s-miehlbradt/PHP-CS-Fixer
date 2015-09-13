@@ -147,7 +147,13 @@ abstract class AbstractIntegrationTest extends \PHPUnit_Framework_TestCase
         $tmpFile = static::getTempFile();
 
         if (false === @file_put_contents($tmpFile, $input)) {
-            throw new IOException(sprintf('Failed to write to tmp. file "%s".', $tmpFile));
+            $error = error_get_last();
+
+            if (null !== $error) {
+                throw new IOException(sprintf('Failed to write to tmp file "%s", "%s".', $tmpFile, $error['message']), 0, null, $tmpFile);
+            }
+
+            throw new IOException(sprintf('Failed to write to tmp file "%s".', $tmpFile), 0, null, $tmpFile);
         }
 
         $changed = $fixer->fixFile(new \SplFileInfo($tmpFile), $fixers, false, true, new FileCacheManager(false, null, $fixers));
