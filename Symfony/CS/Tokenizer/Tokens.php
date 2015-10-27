@@ -1353,28 +1353,9 @@ class Tokens extends \SplFixedArray
 
         $kinds = $this->findGivenKind(array(T_OPEN_TAG, T_OPEN_TAG_WITH_ECHO, T_INLINE_HTML));
 
-        /*
-         * Fix HHVM incompatibilities
-         */
-        $hhvmOpenTagsWithEcho = array();
-
-        if (defined('HHVM_VERSION')) {
-            /*
-             * HHVM parses '<?=' as T_ECHO instead of T_OPEN_TAG_WITH_ECHO
-             *
-             * @see https://github.com/facebook/hhvm/issues/4809
-             */
-            $hhvmEchoes = $this->findGivenKind(T_ECHO);
-            foreach ($hhvmEchoes as $token) {
-                if (0 === strpos($token->getContent(), '<?=')) {
-                    $hhvmOpenTagsWithEcho[] = $token;
-                }
-            }
-        }
-
         return
             0 === count($kinds[T_INLINE_HTML]) &&
-            1 === (count($kinds[T_OPEN_TAG]) + count($kinds[T_OPEN_TAG_WITH_ECHO]) + count($hhvmOpenTagsWithEcho))
+            1 === (count($kinds[T_OPEN_TAG]) + count($kinds[T_OPEN_TAG_WITH_ECHO]))
         ;
     }
 }
