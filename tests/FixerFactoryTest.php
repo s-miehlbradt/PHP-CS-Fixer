@@ -215,7 +215,7 @@ final class FixerFactoryTest extends \PHPUnit_Framework_TestCase
             array($fixers['no_unused_imports'], $fixers['no_extra_consecutive_blank_lines']), // tested also in: no_unused_imports,no_extra_consecutive_blank_lines.test
             array($fixers['single_import_per_statement'], $fixers['no_unused_imports']), // tested also in: single_import_per_statement,no_unused_imports.test
             array($fixers['no_leading_import_slash'], $fixers['ordered_imports']), // tested also in: no_leading_import_slash,ordered_imports.test
-            array($fixers['no_blank_lines_between_uses'], $fixers['ordered_imports']),
+            array($fixers['no_extra_consecutive_blank_lines'], $fixers['ordered_imports']),
             array($fixers['no_unused_imports'], $fixers['no_leading_import_slash']),
             array($fixers['single_import_per_statement'], $fixers['no_leading_import_slash']),
             array($fixers['concat_without_spaces'], $fixers['concat_with_spaces']),

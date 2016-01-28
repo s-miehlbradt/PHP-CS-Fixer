@@ -20,6 +20,7 @@ return Symfony\CS\Config::create()
         'php_unit_strict' => true,
         'strict' => true,
         'strict_param' => true,
+        'no_extra_consecutive_blank_lines' => array('break', 'continue', 'extra', 'return', 'throw', 'use', 'curly_brace_open'),
     ))
     ->finder(
         Symfony\CS\Finder::create()

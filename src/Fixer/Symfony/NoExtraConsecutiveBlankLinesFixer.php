@@ -25,7 +25,12 @@ final class NoExtraConsecutiveBlankLinesFixer extends AbstractFixer
     /**
      * @var array<int, string> key is token id, value is name of callback
      */
-    private $tokenCallbackMap = array(T_WHITESPACE => 'removeMultipleBlankLines');
+    private $tokenKindCallbackMap = array(T_WHITESPACE => 'removeMultipleBlankLines');
+
+    /**
+     * @var array<string, string> token prototype, value is name of callback
+     */
+    private $tokenEqualsMap = array();
 
     /**
      * @var Tokens
@@ -42,6 +47,7 @@ final class NoExtraConsecutiveBlankLinesFixer extends AbstractFixer
      * - 'return' remove blank lines after a line with a 'return' statement
      * - 'throw' remove blank lines after a line with a 'throw' statement
      * - 'use' remove blank lines between 'use' import statements
+     * - 'curly_brace_open' remove blank lines after a curly opening brace ('{')
      *
      * @param string[]|null $configuration
      */
@@ -51,26 +57,29 @@ final class NoExtraConsecutiveBlankLinesFixer extends AbstractFixer
             return;
         }
 
-        $this->tokenCallbackMap = array();
+        $this->tokenKindCallbackMap = array();
         foreach ($configuration as $item) {
             switch ($item) {
                 case 'break':
-                    $this->tokenCallbackMap[T_BREAK] = 'removeEmptyLinesAfterLineWithTokenAt';
+                    $this->tokenKindCallbackMap[T_BREAK] = 'removeEmptyLinesAfterLineWithTokenAt';
                     break;
                 case 'continue':
-                    $this->tokenCallbackMap[T_CONTINUE] = 'removeEmptyLinesAfterLineWithTokenAt';
+                    $this->tokenKindCallbackMap[T_CONTINUE] = 'removeEmptyLinesAfterLineWithTokenAt';
                     break;
                 case 'extra':
-                    $this->tokenCallbackMap[T_WHITESPACE] = 'removeMultipleBlankLines';
+                    $this->tokenKindCallbackMap[T_WHITESPACE] = 'removeMultipleBlankLines';
                     break;
                 case 'return':
-                    $this->tokenCallbackMap[T_RETURN] = 'removeEmptyLinesAfterLineWithTokenAt';
+                    $this->tokenKindCallbackMap[T_RETURN] = 'removeEmptyLinesAfterLineWithTokenAt';
                     break;
                 case 'throw':
-                    $this->tokenCallbackMap[T_THROW] = 'removeEmptyLinesAfterLineWithTokenAt';
+                    $this->tokenKindCallbackMap[T_THROW] = 'removeEmptyLinesAfterLineWithTokenAt';
                     break;
                 case 'use':
-                    $this->tokenCallbackMap[T_USE] = 'removeBetweenUse';
+                    $this->tokenKindCallbackMap[T_USE] = 'removeBetweenUse';
+                    break;
+                case 'curly_brace_open':
+                    $this->tokenEqualsMap['{'] = 'removeEmptyLinesAfterLineWithTokenAt';
                     break;
                 default:
                     throw new InvalidFixerConfigurationException($this->getName(), sprintf('Unknown configuration item "%s" passed.', $item));
@@ -116,38 +125,38 @@ final class NoExtraConsecutiveBlankLinesFixer extends AbstractFixer
 
     private function fixByToken(Token $token, $index)
     {
-        foreach ($this->tokenCallbackMap as $kind => $callback) {
+        foreach ($this->tokenKindCallbackMap as $kind => $callback) {
             if (!$token->isGivenKind($kind)) {
                 continue;
             }
 
-            $callback = $this->tokenCallbackMap[$kind];
             $this->$callback($index);
 
             return;
+        }
+
+        foreach ($this->tokenEqualsMap as $equals => $callback) {
+            if (!$token->equals($equals)) {
+                continue;
+            }
+
+            $this->$callback($index);
         }
     }
 
     private function removeBetweenUse($index)
     {
-        $tokenCount = count($this->tokens);
-        for ($i = $index; $i < $tokenCount; ++$i) {
-            if (!$this->tokens[$i]->equals(';')) {
-                continue;
-            }
-
-            $next = $this->tokens->getNextMeaningfulToken($i);
-            if (!$this->tokens[$next]->isGivenKind(T_USE)) {
-                continue;
-            }
-
-            for ($i = $next; $i > $index; --$i) {
-                if ($this->tokens[$i]->isWhitespace() && substr_count($this->tokens[$i]->getContent(), "\n") > 1) {
-                    $this->tokens[$i]->setContent("\n");
-                }
-            }
-            break;
+        $next = $this->tokens->getNextTokenOfKind($index, array(';', T_CLOSE_TAG));
+        if (null === $next || $this->tokens[$next]->isGivenKind(T_CLOSE_TAG)) {
+            return;
         }
+
+        $nextUseCandidate = $this->tokens->getNextMeaningfulToken($next);
+        if (null === $nextUseCandidate || 1 === $nextUseCandidate - $next || !$this->tokens[$nextUseCandidate]->isGivenKind(T_USE)) {
+            return;
+        }
+
+        return $this->removeEmptyLinesAfterLineWithTokenAt($next);
     }
 
     private function removeMultipleBlankLines($index)

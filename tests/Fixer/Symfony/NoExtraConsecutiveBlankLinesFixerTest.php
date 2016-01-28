@@ -19,6 +19,44 @@ use Symfony\CS\Test\AbstractFixerTestCase;
 final class NoExtraConsecutiveBlankLinesFixerTest extends AbstractFixerTestCase
 {
     /**
+     * @dataProvider provideFix1Cases
+     */
+    public function testFix1($expected, $input = null)
+    {
+        $this->getFixer()->configure(array('use'));
+        $this->doTest($expected, $input);
+    }
+
+    public function provideFix1Cases()
+    {
+        return array(
+            array('<?php use A\B;'),
+            array('<?php use A\B?>'),
+            array('<?php use A\B;use A\C; return 1;'),
+            array(
+                '<?php
+                    use A\B;
+                    use A\C;',
+                '<?php
+                    use A\B;
+
+                    use A\C;',
+            ),
+            array(
+                '<?php use A\B;use A\C;
+                    use C;
+                return 1;
+                ',
+                '<?php use A\B;use A\C;
+
+                    use C;
+                return 1;
+                ',
+            ),
+        );
+    }
+
+    /**
      * @param int[]         $lineNumberRemoved Line numbers expected to be removed after fixing
      * @param string[]|null $config
      *
@@ -66,10 +104,11 @@ class Test {
         }
     }
 
-    public function testContinueAndReturn($a, $b)
+    protected static function testContinueAndReturn($a, $b)
     {
         while($a < 100) {
             if ($b < time()) {
+
                 continue;
 
             }
@@ -81,6 +120,15 @@ class Test {
         return $a;
 
     }
+
+    private function test(){
+
+        // comment
+    }
+
+    private function test123(){
+        // comment
+    }
 }
 EOF;
         $this->doTest($this->removeLinesFromString($template, $lineNumberRemoved), $template);
@@ -90,6 +138,10 @@ EOF;
     {
         $tests = array(
             array(
+                array(9, 43, 57),
+                array('curly_brace_open'),
+            ),
+            array(
                 array(3, 5),
                 array('use'),
             ),
@@ -98,11 +150,11 @@ EOF;
                 array('extra'),
             ),
             array(
-                array(48, 52),
+                array(49, 53),
                 array('return'),
             ),
             array(
-                array(44),
+                array(45),
                 array('continue'),
             ),
             array(
