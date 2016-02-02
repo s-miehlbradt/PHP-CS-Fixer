@@ -235,8 +235,7 @@ final class ConfigurationResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testResolveConfigFileChooseFileWithInvalidFile()
     {
-        $dirBase = __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'ConfigurationResolverConfigFile'.DIRECTORY_SEPARATOR;
-        $dirBase = realpath($dirBase);
+        $dirBase = realpath(__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'ConfigurationResolverConfigFile'.DIRECTORY_SEPARATOR);
         $this->resolver
             ->setOption('path', $dirBase.'/case_5')
             ->resolve();
@@ -245,11 +244,53 @@ final class ConfigurationResolverTest extends \PHPUnit_Framework_TestCase
     public function testResolvePathRelative()
     {
         $this->resolver
-            ->setCwd(__DIR__)
-            ->setOption('path', 'Foo'.DIRECTORY_SEPARATOR.'Bar')
+            ->setCwd(dirname(__DIR__))
+            ->setOption('path', basename(__DIR__))
             ->resolve();
 
-        $this->assertSame(__DIR__.DIRECTORY_SEPARATOR.'Foo'.DIRECTORY_SEPARATOR.'Bar', $this->resolver->getPath());
+        $this->assertSame(__DIR__, $this->resolver->getPath());
+    }
+
+    public function testResolvePathWithFileThatIsExcludedDirectly()
+    {
+        $dir = __DIR__;
+        $this->config->getFinder()
+            ->in($dir)
+            ->notPath(substr(__FILE__, strlen($dir) + 1));
+
+        $this->resolver
+            ->setOption('path', __FILE__)
+            ->resolve();
+
+        $this->assertCount(0, $this->resolver->getConfig()->getFinder());
+    }
+
+    public function testResolvePathWithFileThatIsExcludedByDir()
+    {
+        $dir = realpath(__DIR__.'/..');
+        $this->config->getFinder()
+            ->in($dir)
+            ->exclude(substr(realpath(__DIR__), strlen($dir) + 1));
+
+        $this->resolver
+            ->setOption('path', __FILE__)
+            ->resolve();
+
+        $this->assertCount(0, iterator_to_array($this->resolver->getConfig()->getFinder()));
+    }
+
+    public function testResolvePathWithFileThatIsNotExcluded()
+    {
+        $dir = __DIR__;
+        $this->config->getFinder()
+            ->in($dir)
+            ->notPath('foo-'.substr(__FILE__, strlen($dir) + 1));
+
+        $this->resolver
+            ->setOption('path', __FILE__)
+            ->resolve();
+
+        $this->assertCount(1, iterator_to_array($this->resolver->getConfig()->getFinder()));
     }
 
     public function testResolveIsDryRunViaStdIn()
