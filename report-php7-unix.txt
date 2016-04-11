@@ -1,0 +1,44 @@
+PHP 7.0.5-2+deb.sury.org~wily+1 (cli) ( NTS )
+Copyright (c) 1997-2016 The PHP Group
+Zend Engine v3.0.0, Copyright (c) 1998-2016 Zend Technologies
+    with Zend OPcache v7.0.6-dev, Copyright (c) 1999-2016, by Zend Technologies
+================================================================================
+Architecture:          x86_64
+CPU op-mode(s):        32-bit, 64-bit
+Byte Order:            Little Endian
+CPU(s):                4
+On-line CPU(s) list:   0-3
+Thread(s) per core:    2
+Core(s) per socket:    2
+Socket(s):             1
+NUMA node(s):          1
+Vendor ID:             GenuineIntel
+CPU family:            6
+Model:                 69
+Model name:            Intel(R) Core(TM) i5-4210U CPU @ 1.70GHz
+Stepping:              1
+CPU MHz:               2403.937
+CPU max MHz:           2700,0000
+CPU min MHz:           800,0000
+BogoMIPS:              4789.08
+Virtualization:        VT-x
+L1d cache:             32K
+L1i cache:             32K
+L2 cache:              256K
+L3 cache:              3072K
+NUMA node0 CPU(s):     0-3
+================================================================================
+Loaded config from "php-cs-fixer_v2.php_cs".
+
+Fixed all files in 12.832 seconds, 8.000 MB memory used
+--------------------------------------------------------------------------------
+Loaded config from "php-cs-fixer_v2.php_cs".
+
+Fixed all files in 0.033 seconds, 4.000 MB memory used
+================================================================================
+Loaded config from "php-cs-fixer_v1.php_cs"
+Fixed all files in 25.197 seconds, 8.000 MB memory used
+--------------------------------------------------------------------------------
+Loaded config from "php-cs-fixer_v1.php_cs"
+Fixed all files in 0.041 seconds, 4.000 MB memory used
+

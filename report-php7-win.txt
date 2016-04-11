@@ -1,0 +1,32 @@
+php --version
+PHP 7.0.0RC8 (cli) (built: Nov 25 2015 14:00:03) ( ZTS )
+Copyright (c) 1997-2015 The PHP Group
+Zend Engine v3.0.0, Copyright (c) 1998-2015 Zend Technologies
+================================================================================
+
+wmic cpu get name
+Name
+Pentium(R) Dual-Core CPU       T4400  @ 2.20GHz
+
+================================================================================
+
+php php-cs-fixer_v2.phar fix --config=php-cs-fixer_v2.php_cs
+Loaded config from "php-cs-fixer_v2.php_cs".
+
+Fixed all files in 75.885 seconds, 8.000 MB memory used
+--------------------------------------------------------------------------------
+
+php php-cs-fixer_v2.phar fix --config=php-cs-fixer_v2.php_cs
+Loaded config from "php-cs-fixer_v2.php_cs".
+
+Fixed all files in 10.307 seconds, 6.000 MB memory used
+================================================================================
+
+php php-cs-fixer_v1.phar fix --config-file=php-cs-fixer_v1.php_cs
+Loaded config from "php-cs-fixer_v1.php_cs"
+Fixed all files in 120.619 seconds, 8.000 MB memory used
+--------------------------------------------------------------------------------
+
+php php-cs-fixer_v1.phar fix --config-file=php-cs-fixer_v1.php_cs
+Loaded config from "php-cs-fixer_v1.php_cs"
+Fixed all files in 9.231 seconds, 4.000 MB memory used
