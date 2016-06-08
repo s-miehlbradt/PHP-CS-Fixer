@@ -128,7 +128,7 @@ final class Runner
         $finder = $config->getFinder();
         $finderIterator = $finder instanceof \IteratorAggregate ? $finder->getIterator() : $finder;
 
-        $collection = new FileLintingIterator(
+        $collection = new FileCachingLintingIterator(
             new FileFilterIterator(
                 $finderIterator,
                 $this->eventDispatcher,

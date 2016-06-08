@@ -19,7 +19,7 @@ use Symfony\Component\Process\Process;
  *
  * @internal
  */
-final class LintingResult implements LintingResultInterface
+final class ProcessLintingResult implements LintingResultInterface
 {
     private $isSuccessful;
     private $process;
@@ -34,7 +34,7 @@ final class LintingResult implements LintingResultInterface
      */
     public function check()
     {
-        if (!$this->isSuccessful()) {
+        if (!$this->isSuccessful) {
             // on some systems stderr is used, but on others, it's not
             throw new LintingException($this->process->getErrorOutput() ?: $this->process->getOutput(), $this->process->getExitCode());
         }

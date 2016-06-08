@@ -24,7 +24,7 @@ use Symfony\Component\Process\ProcessUtils;
  *
  * @internal
  */
-final class Linter implements LinterInterface
+final class ProcessLinter implements LinterInterface
 {
     /**
      * Temporary file for code linting.
@@ -69,7 +69,7 @@ final class Linter implements LinterInterface
      */
     public function lintFile($path)
     {
-        return new LintingResult($this->createProcessForFile($path));
+        return new ProcessLintingResult($this->createProcessForFile($path));
     }
 
     /**
@@ -77,7 +77,7 @@ final class Linter implements LinterInterface
      */
     public function lintSource($source)
     {
-        return new LintingResult($this->createProcessForSource($source));
+        return new ProcessLintingResult($this->createProcessForSource($source));
     }
 
     /**
