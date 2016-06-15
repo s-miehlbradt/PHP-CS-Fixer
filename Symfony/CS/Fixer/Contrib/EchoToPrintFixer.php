@@ -29,21 +29,6 @@ final class EchoToPrintFixer extends AbstractFixer
 
         $echoTokens = $tokens->findGivenKind(T_ECHO);
 
-        if (defined('HHVM_VERSION')) {
-            /*
-             * HHVM parses '<?=' as T_ECHO instead of T_OPEN_TAG_WITH_ECHO
-             *
-             * @see https://github.com/facebook/hhvm/issues/4809
-             */
-
-            $echoTokens = array_filter(
-                $echoTokens,
-                function (Token $token) {
-                    return 0 !== strpos($token->getContent(), '<?=');
-                }
-            );
-        }
-
         foreach ($echoTokens as $echoIndex => $echoToken) {
             $nextTokenIndex = $tokens->getNextMeaningfulToken($echoIndex);
             $endTokenIndex = $tokens->getNextTokenOfKind($echoIndex, array(';', array(T_CLOSE_TAG)));
